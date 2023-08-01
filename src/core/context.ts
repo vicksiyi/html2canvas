@@ -7,6 +7,10 @@ export type ContextOptions = {
     cache?: Cache;
 } & ResourceOptions;
 
+/**
+ * 为每一个Context都创建一个logger和一个cache
+ * cache可以使用外部传进来的进行！！！
+ */
 export class Context {
     private readonly instanceName = `#${Context.instanceCount++}`;
     readonly logger: Logger;

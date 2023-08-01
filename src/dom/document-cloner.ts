@@ -59,7 +59,7 @@ export class DocumentCloner {
         private readonly options: CloneConfigurations
     ) {
         this.scrolledElements = [];
-        this.referenceElement = element;
+        this.referenceElement = element;  /** 当前cloner的element对象 */
         this.counters = new CounterState();
         this.quoteDepth = 0;
         if (!element.ownerDocument) {

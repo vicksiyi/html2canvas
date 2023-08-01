@@ -169,9 +169,14 @@ const INLINE_SVG = /^data:image\/svg\+xml/i;
 const INLINE_BASE64 = /^data:image\/.*;base64,/i;
 const INLINE_IMG = /^data:image\/.*/i;
 
+/** 判断是否SVG 可以绘制 */
 const isRenderable = (src: string): boolean => FEATURES.SUPPORT_SVG_DRAWING || !isSVG(src);
+/** 判断是否为内联图片 */
 const isInlineImage = (src: string): boolean => INLINE_IMG.test(src);
+/** 判断是否为base64图片 */
 const isInlineBase64Image = (src: string): boolean => INLINE_BASE64.test(src);
+/** 判断是否为blob图片 */
 const isBlobImage = (src: string): boolean => src.substr(0, 4) === 'blob';
 
+/** 判断是否为svg */
 const isSVG = (src: string): boolean => src.substr(-3).toLowerCase() === 'svg' || INLINE_SVG.test(src);

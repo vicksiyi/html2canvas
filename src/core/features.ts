@@ -67,6 +67,9 @@ const testCORS = (): boolean => typeof new Image().crossOrigin !== 'undefined';
 
 const testResponseType = (): boolean => typeof new XMLHttpRequest().responseType === 'string';
 
+/**
+ * 判断当前canvas是否支持svg类型的绘制
+ */
 const testSVG = (document: Document): boolean => {
     const img = new Image();
     const canvas = document.createElement('canvas');
@@ -166,6 +169,9 @@ export const loadSerializedSVG = (svg: Node): Promise<HTMLImageElement> => {
     });
 };
 
+/**
+ * FEATURES 变成只读的属性
+ */
 export const FEATURES = {
     get SUPPORT_RANGE_BOUNDS(): boolean {
         'use strict';

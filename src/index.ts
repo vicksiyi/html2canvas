@@ -22,6 +22,10 @@ const html2canvas = (element: HTMLElement, options: Partial<Options> = {}): Prom
 
 export default html2canvas;
 
+
+/***
+ * ????????????用途
+ */
 if (typeof window !== 'undefined') {
     CacheStorage.setContext(window);
 }
@@ -30,18 +34,21 @@ const renderElement = async (element: HTMLElement, opts: Partial<Options>): Prom
     if (!element || typeof element !== 'object') {
         return Promise.reject('Invalid element provided as first argument');
     }
+    // 获取当前元素属于那个document
     const ownerDocument = element.ownerDocument;
 
     if (!ownerDocument) {
         throw new Error(`Element is not attached to a Document`);
     }
 
+    // 获取当前document的window
     const defaultView = ownerDocument.defaultView;
 
     if (!defaultView) {
         throw new Error(`Document is not attached to a Window`);
     }
 
+    // 初始化resource选项
     const resourceOptions = {
         allowTaint: opts.allowTaint ?? false,
         imageTimeout: opts.imageTimeout ?? 15000,
@@ -49,12 +56,14 @@ const renderElement = async (element: HTMLElement, opts: Partial<Options>): Prom
         useCORS: opts.useCORS ?? false
     };
 
+    // 初始化上下文选项
     const contextOptions = {
         logging: opts.logging ?? true,
         cache: opts.cache,
         ...resourceOptions
     };
 
+    // 初始化window选项
     const windowOptions = {
         windowWidth: opts.windowWidth ?? defaultView.innerWidth,
         windowHeight: opts.windowHeight ?? defaultView.innerHeight,
@@ -62,6 +71,7 @@ const renderElement = async (element: HTMLElement, opts: Partial<Options>): Prom
         scrollY: opts.scrollY ?? defaultView.pageYOffset
     };
 
+    // 创建一个window bounds
     const windowBounds = new Bounds(
         windowOptions.scrollX,
         windowOptions.scrollY,
@@ -73,6 +83,7 @@ const renderElement = async (element: HTMLElement, opts: Partial<Options>): Prom
 
     const foreignObjectRendering = opts.foreignObjectRendering ?? false;
 
+    // 初始化clone配置
     const cloneOptions: CloneConfigurations = {
         allowTaint: opts.allowTaint ?? false,
         onclone: opts.onclone,
@@ -81,6 +92,7 @@ const renderElement = async (element: HTMLElement, opts: Partial<Options>): Prom
         copyStyles: foreignObjectRendering
     };
 
+    // 是否打印日志
     context.logger.debug(
         `Starting document clone with size ${windowBounds.width}x${
             windowBounds.height
