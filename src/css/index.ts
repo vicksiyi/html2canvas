@@ -81,6 +81,9 @@ import {webkitTextStrokeColor} from './property-descriptors/webkit-text-stroke-c
 import {webkitTextStrokeWidth} from './property-descriptors/webkit-text-stroke-width';
 import {Context} from '../core/context';
 
+/**
+ * CSS解析声明器，在parse层之上
+ */
 export class CSSParsedDeclaration {
     animationDuration: ReturnType<typeof duration.parse>;
     backgroundClip: ReturnType<typeof backgroundClip.parse>;
@@ -227,30 +230,38 @@ export class CSSParsedDeclaration {
         this.zIndex = parse(context, zIndex, declaration.zIndex);
     }
 
+    // 判断是否显示
     isVisible(): boolean {
         return this.display > 0 && this.opacity > 0 && this.visibility === VISIBILITY.VISIBLE;
     }
 
+    // 判断背景颜色是否为透明
     isTransparent(): boolean {
         return isTransparent(this.backgroundColor);
     }
 
+    // 判断transform是否为空
     isTransformed(): boolean {
         return this.transform !== null;
     }
 
+    // 判断position是否不为默认值
     isPositioned(): boolean {
         return this.position !== POSITION.STATIC;
     }
 
+    // 判断position不是默认值并且z-index是否为auto
     isPositionedWithZIndex(): boolean {
         return this.isPositioned() && !this.zIndex.auto;
     }
-
+    // 浮动是否存在
     isFloating(): boolean {
         return this.float !== FLOAT.NONE;
     }
-
+    /**
+     * display是通过1<<xx 去分类的
+     * 下面根据contains判断两者是否一样，如果不一样则为false
+     */
     isInlineLevel(): boolean {
         return (
             contains(this.display, DISPLAY.INLINE) ||

@@ -10,6 +10,7 @@ export const color: ITypeDescriptor<Color> = {
     name: 'color',
     parse: (context: Context, value: CSSValue): Color => {
         if (value.type === TokenType.FUNCTION) {
+            // 判断是否为可支持的颜色函数
             const colorFunction = SUPPORTED_COLOR_FUNCTIONS[value.name];
             if (typeof colorFunction === 'undefined') {
                 throw new Error(`Attempting to parse an unsupported color function "${value.name}"`);
@@ -17,6 +18,13 @@ export const color: ITypeDescriptor<Color> = {
             return colorFunction(context, value.values);
         }
 
+        /**
+         * 判断是否为hash_token
+         * rgb(xxx,xxx,xxx)
+         * rgba(xxx,xxx,xxx,xxx)
+         * XXXXXX
+         * XXXXXXXX
+         */
         if (value.type === TokenType.HASH_TOKEN) {
             if (value.value.length === 3) {
                 const r = value.value.substring(0, 1);
@@ -49,6 +57,7 @@ export const color: ITypeDescriptor<Color> = {
             }
         }
 
+        // 判断是否为 red、yellow等等
         if (value.type === TokenType.IDENT_TOKEN) {
             const namedColor = COLORS[value.value.toUpperCase()];
             if (typeof namedColor !== 'undefined') {
@@ -56,12 +65,17 @@ export const color: ITypeDescriptor<Color> = {
             }
         }
 
+        // 否则返回透明
         return COLORS.TRANSPARENT;
     }
 };
 
+// 判断颜色是否为rgba(xxx,xxx,xxx,0)
 export const isTransparent = (color: Color): boolean => (0xff & color) === 0;
 
+/**
+ * 转成字符串
+ */
 export const asString = (color: Color): string => {
     const alpha = 0xff & color;
     const blue = 0xff & (color >> 8);
@@ -70,6 +84,9 @@ export const asString = (color: Color): string => {
     return alpha < 255 ? `rgba(${red},${green},${blue},${alpha / 255})` : `rgb(${red},${green},${blue})`;
 };
 
+/**
+ * 转成一个数字
+ */
 export const pack = (r: number, g: number, b: number, a: number): Color =>
     ((r << 24) | (g << 16) | (b << 8) | (Math.round(a * 255) << 0)) >>> 0;
 
@@ -121,6 +138,10 @@ function hue2rgb(t1: number, t2: number, hue: number): number {
     }
 }
 
+
+/**
+ * hsl转为rgba
+ */
 const hsl = (context: Context, args: CSSValue[]): number => {
     const tokens = args.filter(nonFunctionArgSeparator);
     const [hue, saturation, lightness, alpha] = tokens;
@@ -142,7 +163,9 @@ const hsl = (context: Context, args: CSSValue[]): number => {
     const b = hue2rgb(t1, t2, h - 1 / 3);
     return pack(r * 255, g * 255, b * 255, a);
 };
-
+/**
+ * 支持的颜色函数
+ */
 const SUPPORTED_COLOR_FUNCTIONS: {
     [key: string]: (context: Context, args: CSSValue[]) => number;
 } = {
