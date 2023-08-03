@@ -34,6 +34,10 @@ export const getAbsoluteValueForTuple = (
     const [x, y] = tuple;
     return [getAbsoluteValue(x, width), getAbsoluteValue(typeof y !== 'undefined' ? y : x, height)];
 };
+
+/**
+ * 根据比例转化成相应的数值
+ */
 export const getAbsoluteValue = (token: LengthPercentage, parent: number): number => {
     if (token.type === TokenType.PERCENTAGE_TOKEN) {
         return (token.number / 100) * parent;

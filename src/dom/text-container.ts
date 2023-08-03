@@ -8,11 +8,12 @@ export class TextContainer {
     textBounds: TextBounds[];
 
     constructor(context: Context, node: Text, styles: CSSParsedDeclaration) {
-        this.text = transform(node.data, styles.textTransform);
-        this.textBounds = parseTextBounds(context, this.text, styles, node);
+        this.text = transform(node.data, styles.textTransform); /** 转换文本 lowercase 和别的等等 */
+        this.textBounds = parseTextBounds(context, this.text, styles, node); /** 解析文本的bounds */
     }
 }
 
+/** 转换文本 */
 const transform = (text: string, transform: TEXT_TRANSFORM) => {
     switch (transform) {
         case TEXT_TRANSFORM.LOWERCASE:

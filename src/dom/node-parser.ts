@@ -15,6 +15,9 @@ import {Context} from '../core/context';
 const LIST_OWNERS = ['OL', 'UL', 'MENU'];
 
 const parseNodeTree = (context: Context, node: Node, parent: ElementContainer, root: ElementContainer) => {
+    /**
+     * 遍历所有子节点[这个遍历方法也不错]
+     */
     for (let childNode = node.firstChild, nextNode; childNode; childNode = nextNode) {
         nextNode = childNode.nextSibling;
 
@@ -22,6 +25,7 @@ const parseNodeTree = (context: Context, node: Node, parent: ElementContainer, r
             parent.textNodes.push(new TextContainer(context, childNode, parent.styles));
         } else if (isElementNode(childNode)) {
             if (isSlotElement(childNode) && childNode.assignedNodes) {
+                // 将slot里面的节点当作节点解析
                 childNode.assignedNodes().forEach((childNode) => parseNodeTree(context, childNode, parent, root));
             } else {
                 const container = createContainer(context, childNode);
@@ -95,7 +99,7 @@ const createContainer = (context: Context, element: Element): ElementContainer =
 
 export const parseTree = (context: Context, element: HTMLElement): ElementContainer => {
     const container = createContainer(context, element);
-    container.flags |= FLAGS.CREATES_REAL_STACKING_CONTEXT;
+    container.flags |= FLAGS.CREATES_REAL_STACKING_CONTEXT; /** 可以根据|知道当前支持哪些flag了 即： X & flags */
     parseNodeTree(context, element, container, container);
     return container;
 };

@@ -39,10 +39,11 @@ export class ElementPaint {
 
     constructor(readonly container: ElementContainer, readonly parent: ElementPaint | null) {
         this.curves = new BoundCurves(this.container);
+        // 透明度的effects
         if (this.container.styles.opacity < 1) {
             this.effects.push(new OpacityEffect(this.container.styles.opacity));
         }
-
+        // transform的effects
         if (this.container.styles.transform !== null) {
             const offsetX = this.container.bounds.left + this.container.styles.transformOrigin[0].number;
             const offsetY = this.container.bounds.top + this.container.styles.transformOrigin[1].number;
@@ -50,6 +51,7 @@ export class ElementPaint {
             this.effects.push(new TransformEffect(offsetX, offsetY, matrix));
         }
 
+        // overflow 的 effects
         if (this.container.styles.overflowX !== OVERFLOW.VISIBLE) {
             const borderBox = calculateBorderBoxPath(this.curves);
             const paddingBox = calculatePaddingBoxPath(this.curves);

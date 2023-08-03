@@ -1,5 +1,9 @@
 import {fromCodePoint, toCodePoints} from 'css-line-break';
 
+/**
+ * 测试rangeBounds是否可以使用,
+ * ？？？？？？？？？？？？？Range对象的作用是什么
+ */
 const testRangeBounds = (document: Document) => {
     const TEST_HEIGHT = 123;
 

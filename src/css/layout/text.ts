@@ -92,6 +92,9 @@ const createRange = (node: Text, offset: number, length: number): Range => {
 };
 
 export const segmentGraphemes = (value: string): string[] => {
+    /**
+     * 如果浏览器支持Intl.Segmenter直接使用否则使用text-segmentation库
+     */
     if (FEATURES.SUPPORT_NATIVE_TEXT_SEGMENTATION) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const segmenter = new (Intl as any).Segmenter(void 0, {granularity: 'grapheme'});
@@ -103,6 +106,9 @@ export const segmentGraphemes = (value: string): string[] => {
 };
 
 const segmentWords = (value: string, styles: CSSParsedDeclaration): string[] => {
+    /**
+     * 如果浏览器支持Intl.Segmenter直接使用否则使用自定义的word分割
+     */
     if (FEATURES.SUPPORT_NATIVE_TEXT_SEGMENTATION) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const segmenter = new (Intl as any).Segmenter(void 0, {
@@ -115,6 +121,9 @@ const segmentWords = (value: string, styles: CSSParsedDeclaration): string[] => 
     return breakWords(value, styles);
 };
 
+/**
+ * 根据策略去分割文本
+ */
 const breakText = (value: string, styles: CSSParsedDeclaration): string[] => {
     return styles.letterSpacing !== 0 ? segmentGraphemes(value) : segmentWords(value, styles);
 };

@@ -80,7 +80,7 @@ export class CanvasRenderer extends Renderer {
         this.ctx.scale(this.options.scale, this.options.scale);
         this.ctx.translate(-options.x, -options.y);
         this.ctx.textBaseline = 'bottom';
-        this._activeEffects = [];
+        this._activeEffects = []
         this.context.logger.debug(
             `Canvas renderer initialized (${options.width}x${options.height}) with scale ${options.scale}`
         );
@@ -902,8 +902,10 @@ export class CanvasRenderer extends Renderer {
             this.ctx.fillRect(this.options.x, this.options.y, this.options.width, this.options.height);
         }
 
+        /** 层叠上下文 */
         const stack = parseStackingContexts(element);
 
+        /** 根据层叠上下文去渲染 */
         await this.renderStack(stack);
         this.applyEffects([]);
         return this.canvas;

@@ -20,10 +20,17 @@ export class ElementContainer {
     flags = 0;
 
     constructor(protected readonly context: Context, element: Element) {
+        /**
+         * 如果在解析的时候，进行debugger
+         */
         if (isDebugging(element, DebuggerType.PARSE)) {
             debugger;
         }
 
+        /**
+         * 根据当前的getComputedStyle获取当前的style样式
+         * getComputedStyle(h3,null) 或者 getComputedStyle(h3, "::after")
+         */
         this.styles = new CSSParsedDeclaration(context, window.getComputedStyle(element, null));
 
         if (isHTMLElementNode(element)) {
