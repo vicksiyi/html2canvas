@@ -10,6 +10,9 @@ import {LIElementContainer} from '../dom/elements/li-element-container';
 import {createCounterText} from '../css/types/functions/counter';
 import {POSITION} from '../css/property-descriptors/position';
 
+/**
+ * 层级上下文
+ */
 export class StackingContext {
     element: ElementPaint;
     negativeZIndex: StackingContext[];
@@ -32,6 +35,9 @@ export class StackingContext {
     }
 }
 
+/**
+ * 需要绘制的effects和curves
+ */
 export class ElementPaint {
     readonly effects: IElementEffect[] = [];
     readonly curves: BoundCurves;
@@ -94,6 +100,9 @@ export class ElementPaint {
     }
 }
 
+/**
+ * stackingContext和realStackingContext区别
+ */
 const parseStackTree = (
     parent: ElementPaint,
     stackingContext: StackingContext,

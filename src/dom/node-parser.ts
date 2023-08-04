@@ -30,18 +30,27 @@ const parseNodeTree = (context: Context, node: Node, parent: ElementContainer, r
             } else {
                 const container = createContainer(context, childNode);
                 if (container.styles.isVisible()) {
+                    /**
+                     * 需要注意这里的flags后续会使用到
+                     */
                     if (createsRealStackingContext(childNode, container, root)) {
                         container.flags |= FLAGS.CREATES_REAL_STACKING_CONTEXT;
                     } else if (createsStackingContext(container.styles)) {
                         container.flags |= FLAGS.CREATES_STACKING_CONTEXT;
                     }
 
+                    /**
+                     * 需要LIST_OWNER的列表
+                     */
                     if (LIST_OWNERS.indexOf(childNode.tagName) !== -1) {
                         container.flags |= FLAGS.IS_LIST_OWNER;
                     }
 
                     parent.elements.push(container);
                     childNode.slot;
+                    /**
+                     * 需要对shadowRoot进行额外的处理
+                     */
                     if (childNode.shadowRoot) {
                         parseNodeTree(context, childNode.shadowRoot, container, root);
                     } else if (
@@ -57,6 +66,9 @@ const parseNodeTree = (context: Context, node: Node, parent: ElementContainer, r
     }
 };
 
+/**
+ * 根据当前的元素的创建container
+ */
 const createContainer = (context: Context, element: Element): ElementContainer => {
     if (isImageElement(element)) {
         return new ImageElementContainer(context, element);
