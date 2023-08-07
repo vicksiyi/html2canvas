@@ -85,10 +85,10 @@ const renderElement = async (element: HTMLElement, opts: Partial<Options>): Prom
 
     // 初始化clone配置
     const cloneOptions: CloneConfigurations = {
-        allowTaint: opts.allowTaint ?? false,
-        onclone: opts.onclone,
-        ignoreElements: opts.ignoreElements,
-        inlineImages: foreignObjectRendering,
+        allowTaint: opts.allowTaint ?? false, // ????
+        onclone: opts.onclone, // ????
+        ignoreElements: opts.ignoreElements, // 忽略的元素
+        inlineImages: foreignObjectRendering, // 外部传入的 foreignObjectRendering 值 一个boolean
         copyStyles: foreignObjectRendering
     };
 

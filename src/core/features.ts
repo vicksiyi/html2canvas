@@ -147,6 +147,7 @@ export const createForeignObjectSVG = (
 ): SVGForeignObjectElement => {
     const xmlns = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(xmlns, 'svg');
+    // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/foreignObject
     const foreignObject = document.createElementNS(xmlns, 'foreignObject');
     svg.setAttributeNS(null, 'width', width.toString());
     svg.setAttributeNS(null, 'height', height.toString());
